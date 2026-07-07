@@ -1,0 +1,24 @@
+[
+  {
+    "rank": 1,
+    "name": "Lionel Messi",
+    "country": "Argentina 🇦🇷",
+    "yearly_stats": {
+      "2012": {"club": "Barcelona", "games": 60, "goals": 73, "assists": 29, "trophies": "Oltin To'p"},
+      "2015": {"club": "Barcelona", "games": 57, "goals": 58, "assists": 31, "trophies": "UEFA Chempionlar Ligasi 🏆"},
+      "2023": {"club": "PSG / Inter Miami", "games": 44, "goals": 32, "assists": 25, "trophies": "Jahon Chempionati 🏆, Oltin To'p"},
+      "2026": {"club": "Inter Miami", "games": 18, "goals": 14, "assists": 9, "trophies": "MLS Cup"}
+    }
+  },
+  {
+    "rank": 2,
+    "name": "Cristiano Ronaldo",
+    "country": "Portugaliya 🇵🇹",
+    "yearly_stats": {
+      "2012": {"club": "Real Madrid", "games": 55, "goals": 60, "assists": 12, "trophies": "La Liga"},
+      "2016": {"club": "Real Madrid", "games": 48, "goals": 51, "assists": 15, "trophies": "Yevro-2016 🏆, Oltin To'p"},
+      "2024": {"club": "Al-Nassr", "games": 47, "goals": 44, "assists": 13, "trophies": "Saudiya Ligasi To'purari"},
+      "2026": {"club": "Al-Nassr", "games": 22, "goals": 19, "assists": 4, "trophies": "Yo'q"}
+    }
+  }
+]
