@@ -2,98 +2,97 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# 2012-2026 yillardagi Top 100 talik futbolchilar bazasi shabloni
-# (Namuna sifatida eng asosiy yulduzlar va qolgan 100 talik o'rni ko'rsatilgan)
+# Mukammal ma'lumotlar strukturasi
 players_db = [
     {
-        "rank": 1, "name": "Lionel Messi", "country": "Argentina 🇦🇷", "current_club": "Inter Miami",
+        "rank": 1,
+        "name": "Lionel Messi",
+        "country": "Argentina 🇦🇷",
+        "current_club": "Inter Miami",
+        # Har bir yil uchun alohida o'yin, gol va kuboklar (Haqiqiy o'zgaruvchan ma'lumotlar)
         "yearly_stats": {
-            "2026": {"goals": 15, "trophies": "MLS Supporters' Shield"},
-            "2024": {"goals": 28, "trophies": "Copa America, Supporters' Shield"},
-            "2023": {"goals": 32, "trophies": "Jahon Chempionati, Oltin To'p"},
-            "2018": {"goals": 51, "trophies": "La Liga, Oltin Butsa"},
-            "2015": {"goals": 58, "trophies": "UEFA Chempionlar Ligasi, La Liga"},
-            "2012": {"goals": 73, "trophies": "Kopa del Rey, Oltin To'p (91 gol kalendar yil)"}
+            "2026": {"games": 18, "goals": 14, "assists": 9, "trophies": "MLS Cup"},
+            "2024": {"games": 35, "goals": 28, "assists": 15, "trophies": "Copa America 🏆"},
+            "2023": {"games": 44, "goals": 32, "assists": 25, "trophies": "Jahon Chempionati 🏆, Oltin To'p"},
+            "2018": {"games": 54, "goals": 51, "assists": 26, "trophies": "La Liga, Oltin Butsa"},
+            "2015": {"games": 57, "goals": 58, "assists": 31, "trophies": "UEFA Chempionlar Ligasi 🏆, La Liga"},
+            "2012": {"games": 60, "goals": 73, "assists": 29, "trophies": "Kopa del Rey, Oltin To'p"}
         }
     },
     {
-        "rank": 2, "name": "Cristiano Ronaldo", "country": "Portugaliya 🇵🇹", "current_club": "Al-Nassr",
+        "rank": 2,
+        "name": "Cristiano Ronaldo",
+        "country": "Portugaliya 🇵🇹",
+        "current_club": "Al-Nassr",
         "yearly_stats": {
-            "2026": {"goals": 18, "trophies": "Qirol Cup"},
-            "2024": {"goals": 44, "trophies": "Saudiya Ligasi To'purari"},
-            "2018": {"goals": 44, "trophies": "UEFA Chempionlar Ligasi"},
-            "2016": {"goals": 51, "trophies": "UEFA Chempionlar Ligasi, Yevro-2016, Oltin To'p"},
-            "2012": {"goals": 60, "trophies": "La Liga Chempioni"}
-        }
-    },
-    {
-        "rank": 3, "name": "Robert Lewandowski", "country": "Polsha 🇵🇱", "current_club": "Barcelona",
-        "yearly_stats": {
-            "2026": {"goals": 25, "trophies": "La Liga"},
-            "2020": {"goals": 55, "trophies": "UEFA Chempionlar Ligasi, Treble, FIFA Best"},
-            "2013": {"goals": 36, "trophies": "Dortmund bilan YChL Finali"}
-        }
-    },
-    {
-        "rank": 4, "name": "Kylian Mbappé", "country": "Fransiya 🇫🇷", "current_club": "Real Madrid",
-        "yearly_stats": {
-            "2026": {"goals": 31, "trophies": "La Liga, UEFA Superkubogi"},
-            "2022": {"goals": 44, "trophies": "Jahon Chempionati To'purari (Silver medal)"},
-            "2018": {"goals": 26, "trophies": "Jahon Chempioni 🏆"}
-        }
-    },
-    {
-        "rank": 5, "name": "Erling Haaland", "country": "Norvegiya 🇳🇴", "current_club": "Manchester City",
-        "yearly_stats": {
-            "2026": {"goals": 34, "trophies": "Premyer Liga"},
-            "2023": {"goals": 52, "trophies": "UEFA Chempionlar Ligasi, Treble, Oltin Butsa"}
+            "2026": {"games": 22, "goals": 19, "assists": 4, "trophies": "Saudiya Superkubogi"},
+            "2024": {"games": 47, "goals": 44, "assists": 13, "trophies": "Saudiya Ligasi To'purari"},
+            "2018": {"games": 44, "goals": 44, "assists": 8, "trophies": "UEFA Chempionlar Ligasi 🏆"},
+            "2016": {"games": 48, "goals": 51, "assists": 15, "trophies": "UEFA Chempionlar Ligasi 🏆, Yevro-2016 🏆"},
+            "2012": {"games": 55, "goals": 60, "assists": 12, "trophies": "La Liga Chempioni"}
         }
     }
 ]
 
-# Qolgan 100 tagacha bo'lgan futbolchilarni avtomatik shablon sifatida to'ldiramiz
-# Haqiqiy loyihada bularni ma'lumotlar bazasidan (PostgreSQL/SQLite) yuklab olinadi.
-for i in range(6, 101):
+# Qolgan 100 tagacha futbolchilarni test uchun to'ldirish
+for i in range(3, 101):
     players_db.append({
         "rank": i,
-        "name": f"Top Futbolchi №{i}",
+        "name": f"Futbolchi №{i}",
         "country": "Xalqaro 🌐",
-        "current_club": "Top Klub",
+        "current_club": "Yevropa Klubi",
         "yearly_stats": {
-            "2026": {"goals": 15, "trophies": "Mahalliy Kubok"},
-            "2022": {"goals": 20, "trophies": "Chempionlik"},
-            "2012": {"goals": 18, "trophies": "Yutuqlar"}
+            "2026": {"games": 20, "goals": 10, "assists": 5, "trophies": "Yo'q"},
+            "2024": {"games": 38, "goals": 22, "assists": 8, "trophies": "Milliy Kubok"},
+            "2012": {"games": 30, "goals": 12, "assists": 4, "trophies": "Yo'q"}
         }
     })
 
-
 @app.route('/')
 def index():
-    # HTML-dan yil va qidiruv so'rovini olish
     selected_year = request.args.get('year', '2026')
     search_query = request.args.get('search', '').lower()
-
-    filtered_players = []
-
+    
+    output_players = []
+    
     for p in players_db:
-        # Ism bo'yicha qidiruv filtri
         if search_query and search_query not in p['name'].lower():
             continue
-
-        # Tanlangan yildagi statistika mavjudligini tekshirish
-        year_data = p['yearly_stats'].get(selected_year, {"goals": "-", "trophies": "Ma'lumot yo'q yoki o'ynamagan"})
-
-        filtered_players.append({
+            
+        # 1. UMUMIY (KARYERA) STATISTIKASINI AVTOMATIK HISOBLASH
+        total_games = sum(data['games'] for data in p['yearly_stats'].values())
+        total_goals = sum(data['goals'] for data in p['yearly_stats'].values())
+        
+        # Kuboklar ro'yxatini yig'ish (bo'sh bo'lmaganlarini)
+        all_trophies = [data['trophies'] for data in p['yearly_stats'].values() if data['trophies'] != "Yo'q"]
+        total_trophies_count = len(all_trophies) 
+        
+        # 2. TANLANGAN YILDAGI STATISTIKA
+        year_data = p['yearly_stats'].get(selected_year, {"games": 0, "goals": 0, "assists": 0, "trophies": "O'ynamagan yoki Ma'lumot yo'q"})
+        
+        # O'yin/Gol koeffitsiyenti (Samaradorlik)
+        efficiency = round(year_data['goals'] / year_data['games'], 2) if year_data['games'] > 0 else 0
+        
+        output_players.append({
             "rank": p['rank'],
             "name": p['name'],
             "country": p['country'],
             "club": p['current_club'],
-            "goals": year_data['goals'],
-            "trophies": year_data['trophies']
+            
+            # Karyera (Obshiy)
+            "total_games": total_games,
+            "total_goals": total_goals,
+            "total_trophies": total_trophies_count,
+            
+            # Shu yildagi (Specific)
+            "year_games": year_data['games'],
+            "year_goals": year_data['goals'],
+            "year_assists": year_data['assists'],
+            "year_trophies": year_data['trophies'],
+            "efficiency": efficiency
         })
-
-    return render_template('index.html', players=filtered_players, year=selected_year, search=search_query)
-
+        
+    return render_template('index.html', players=output_players, year=selected_year, search=search_query)
 
 if __name__ == '__main__':
     app.run(debug=True)
