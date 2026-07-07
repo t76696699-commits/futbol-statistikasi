@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 100 Futbolchilar Reytingi (2012-2026)</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .rank-badge { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 50%; }
+        .rank-1 { bg-color: #ffd700; color: black; }
+        .rank-2 { bg-color: #c0c0c0; color: black; }
+        .rank-3 { bg-color: #cd7f32; color: white; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="container-fluid px-4 py-5">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold text-dark">🏆 TOP 100 Futbolchilar Tarixiy Reytingi</h1>
+            <p class="text-muted fs-5">2012-yildan 2026-yilgacha bo'lgan gollar va kuboklar statistikasi</p>
+        </div>
+
+        <!-- Filterlar bloki -->
+        <div class="card p-4 shadow-sm mb-4 border-0">
+            <form method="GET" action="/" class="row g-3 justify-content-between align-items-center">
+                <!-- Yilni tanlash (14 yillik: 2012-2026) -->
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Mavsum / Yilni tanlang:</label>
+                    <select name="year" class="form-select form-select-lg" onchange="this.form.submit()">
+                        {% for y in range(2026, 2011, -1) %}
+                            <option value="{{ y }}" {% if year == y|string %}selected{% endif %}>{{ y }}-yil ko'rsatkichlari</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Futbolchini qidirish -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-secondary">Futbolchi ismi bo'yicha qidiruv:</label>
+                    <div class="input-group input-group-lg">
+                        <input type="text" name="search" class="form-control" placeholder="Masalan: Messi, Mbappe..." value="{{ search }}">
+                        <button class="btn btn-primary" type="submit">Qidirish</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Reyting Jadvali -->
+        <div class="card shadow border-0">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                <h4 class="mb-0 fw-bold">📊 Reyting Natijalari: <span class="text-warning">{{ year }}-yil</span></h4>
+                <span class="badge bg-danger fs-6">Top 100 talik baza</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 80px;">O'rin</th>
+                            <th>Futbolchi</th>
+                            <th>Davlati</th>
+                            <th>Klubi (Hozirgi)</th>
+                            <th class="text-center text-warning">Gollar (Shu yildagi)</th>
+                            <th>Yutgan Kuboklari & Shaxsiy Yutuqlari</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if players %}
+                            {% for player in players %}
+                            <tr>
+                                <td>
+                                    {% if player.rank == 1 %}
+                                        <span class="badge bg-warning text-dark fs-6 rank-badge rank-1">1</span>
+                                    {% elif player.rank == 2 %}
+                                        <span class="badge bg-secondary text-light fs-6 rank-badge rank-2">2</span>
+                                    {% elif player.rank == 3 %}
+                                        <span class="badge bg-danger text-light fs-6 rank-badge rank-3">3</span>
+                                    {% else %}
+                                        <span class="text-muted fw-bold ps-2">#{{ player.rank }}</span>
+                                    {% endif %}
+                                </td>
+                                <td><h6 class="mb-0 fw-bold text-primary">{{ player.name }}</h6></td>
+                                <td>{{ player.country }}</td>
+                                <td><span class="badge bg-light text-dark border">{{ player.club }}</span></td>
+                                <td class="text-center fw-bold text-success fs-5">{{ player.goals }}</td>
+                                <td>
+                                    <span class="text-muted">{{ player.trophies }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted fs-5">Qidiruv bo'yicha hech qanday futbolchi topilmadi.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
