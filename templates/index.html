@@ -3,93 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 100 Futbolchilar Reytingi (2012-2026)</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>Jonli Futbol Ma'lumotlar Bazasi (2012-2026)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .rank-badge { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 50%; }
-        .rank-1 { bg-color: #ffd700; color: black; }
-        .rank-2 { bg-color: #c0c0c0; color: black; }
-        .rank-3 { bg-color: #cd7f32; color: white; }
+        .karyera-bg { background-color: #f8f9fa; font-size: 0.9rem; }
+        .efficiency-badge { font-size: 0.85rem; padding: 4px 8px; }
     </style>
 </head>
 <body class="bg-light">
 
     <div class="container-fluid px-4 py-5">
-        <div class="text-center mb-5">
-            <h1 class="fw-bold text-dark">🏆 TOP 100 Futbolchilar Tarixiy Reytingi</h1>
-            <p class="text-muted fs-5">2012-yildan 2026-yilgacha bo'lgan gollar va kuboklar statistikasi</p>
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-success">⚽ Professional Futbol Statistika Markazi</h1>
+            <p class="text-muted">Umumiy ko'rsatkichlar va 14 yillik dinamik o'zgarishlar reytingi</p>
         </div>
 
-        <!-- Filterlar bloki -->
         <div class="card p-4 shadow-sm mb-4 border-0">
-            <form method="GET" action="/" class="row g-3 justify-content-between align-items-center">
-                <!-- Yilni tanlash (14 yillik: 2012-2026) -->
-                <div class="col-md-4">
-                    <label class="form-label fw-bold text-secondary">Mavsum / Yilni tanlang:</label>
+            <form method="GET" action="/" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-dark">Tarixiy Yilni Tanlang:</label>
                     <select name="year" class="form-select form-select-lg" onchange="this.form.submit()">
                         {% for y in range(2026, 2011, -1) %}
-                            <option value="{{ y }}" {% if year == y|string %}selected{% endif %}>{{ y }}-yil ko'rsatkichlari</option>
+                            <option value="{{ y }}" {% if year == y|string %}selected{% endif %}>{{ y }}-yil mavsumi</option>
                         {% endfor %}
                     </select>
                 </div>
-
-                <!-- Futbolchini qidirish -->
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-secondary">Futbolchi ismi bo'yicha qidiruv:</label>
-                    <div class="input-group input-group-lg">
-                        <input type="text" name="search" class="form-control" placeholder="Masalan: Messi, Mbappe..." value="{{ search }}">
-                        <button class="btn btn-primary" type="submit">Qidirish</button>
-                    </div>
+                    <label class="form-label fw-bold text-dark">O'yinchi qidirish:</label>
+                    <input type="text" name="search" class="form-control form-control-lg" placeholder="Ismni kiriting..." value="{{ search }}">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-success btn-lg w-100" type="submit">Ma'lumotlarni Yangilash</button>
                 </div>
             </form>
         </div>
 
-        <!-- Reyting Jadvali -->
         <div class="card shadow border-0">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-                <h4 class="mb-0 fw-bold">📊 Reyting Natijalari: <span class="text-warning">{{ year }}-yil</span></h4>
-                <span class="badge bg-danger fs-6">Top 100 talik baza</span>
+            <div class="card-header bg-dark text-white p-3">
+                <h4 class="mb-0 fw-bold">📊 Reyting Jadvali: <span class="text-warning">{{ year }}</span> - yil holatiga</h4>
             </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0 text-center">
                     <thead class="table-dark">
                         <tr>
-                            <th style="width: 80px;">O'rin</th>
-                            <th>Futbolchi</th>
-                            <th>Davlati</th>
-                            <th>Klubi (Hozirgi)</th>
-                            <th class="text-center text-warning">Gollar (Shu yildagi)</th>
-                            <th>Yutgan Kuboklari & Shaxsiy Yutuqlari</th>
+                            <th rowspan="2" class="align-middle" style="width: 70px;">№</th>
+                            <th rowspan="2" class="align-middle text-start">Futbolchi jamoasi / Davlati</th>
+                            <th colspan="3" class="table-secondary text-dark border-bottom">⚡ UMUMIY (Karyerasi)</th>
+                            <th colspan="4" class="table-warning text-dark border-bottom">📅 {{ year }}-YILDAGI NATIJASI</th>
+                            <th rowspan="2" class="align-middle text-start">Shu yili yutgan kuboklari</th>
+                        </tr>
+                        <tr>
+                            <th class="table-secondary text-dark">Jami O'yin</th>
+                            <th class="table-secondary text-dark">Jami Gol</th>
+                            <th class="table-secondary text-dark">Kuboklar</th>
+                            <th class="table-warning text-dark">O'yin</th>
+                            <th class="table-warning text-dark">Gol</th>
+                            <th class="table-warning text-dark">Asist</th>
+                            <th class="table-warning text-dark">Samaradorlik (Gol/O'yin)</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% if players %}
                             {% for player in players %}
                             <tr>
+                                <td class="fw-bold">#{{ player.rank }}</td>
+                                <td class="text-start">
+                                    <h6 class="mb-0 fw-bold text-primary">{{ player.name }}</h6>
+                                    <small class="text-muted">{{ player.club }} | {{ player.country }}</small>
+                                </td>
+                                <td class="karyera-bg fw-bold">{{ player.total_games }}</td>
+                                <td class="karyera-bg fw-bold text-danger">{{ player.total_goals }}</td>
+                                <td class="karyera-bg"><span class="badge bg-dark">{{ player.total_trophies }} ta</span></td>
+                                
+                                <td class="fw-bold text-secondary">{{ player.year_games }}</td>
+                                <td class="fw-bold text-success fs-5">{{ player.year_goals }}</td>
+                                <td class="text-info font-monospace">{{ player.year_assists }}</td>
                                 <td>
-                                    {% if player.rank == 1 %}
-                                        <span class="badge bg-warning text-dark fs-6 rank-badge rank-1">1</span>
-                                    {% elif player.rank == 2 %}
-                                        <span class="badge bg-secondary text-light fs-6 rank-badge rank-2">2</span>
-                                    {% elif player.rank == 3 %}
-                                        <span class="badge bg-danger text-light fs-6 rank-badge rank-3">3</span>
+                                    {% if player.efficiency > 0.8 %}
+                                        <span class="badge bg-danger efficiency-badge">🔥 {{ player.efficiency }} gol/o'yin</span>
+                                    {% elif player.efficiency > 0.5 %}
+                                        <span class="badge bg-warning text-dark efficiency-badge">⭐ {{ player.efficiency }} gol/o'yin</span>
                                     {% else %}
-                                        <span class="text-muted fw-bold ps-2">#{{ player.rank }}</span>
+                                        <span class="badge bg-light text-dark border efficiency-badge">{{ player.efficiency }} gol/o'yin</span>
                                     {% endif %}
                                 </td>
-                                <td><h6 class="mb-0 fw-bold text-primary">{{ player.name }}</h6></td>
-                                <td>{{ player.country }}</td>
-                                <td><span class="badge bg-light text-dark border">{{ player.club }}</span></td>
-                                <td class="text-center fw-bold text-success fs-5">{{ player.goals }}</td>
-                                <td>
-                                    <span class="text-muted">{{ player.trophies }}</span>
+                                <td class="text-start text-truncate" style="max-width: 250px;">
+                                    <span class="fw-semibold text-dark">{{ player.year_trophies }}</span>
                                 </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted fs-5">Qidiruv bo'yicha hech qanday futbolchi topilmadi.</td>
+                                <td colspan="10" class="text-center py-5 text-muted fs-5">Hech qanday ma'lumot topilmadi.</td>
                             </tr>
                         {% endif %}
                     </tbody>
